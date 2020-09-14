@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+import axios from 'axios'
 
-function App() {
+const App = () => {
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+    }, [])
+
+
+  const [ persons, setPersons ] = useState([])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Phonebook</h2>
+
+      <Filter persons={persons} />
+
+      <h3>Add a new</h3>
+
+      <PersonForm 
+        persons={persons} setPersons={setPersons}
+      />
+
+      <h3>Numbers</h3>
+
+      <Persons persons={persons} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
